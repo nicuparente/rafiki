@@ -24124,6 +24124,16 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+function shuffle(a) {
+  for (var i = a.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var _ref = [a[j], a[i]];
+    a[i] = _ref[0];
+    a[j] = _ref[1];
+  }
+  return a;
+}
+
 var FindItPage = function (_Component) {
   _inherits(FindItPage, _Component);
 
@@ -24133,15 +24143,32 @@ var FindItPage = function (_Component) {
     var _this = _possibleConstructorReturn(this, (FindItPage.__proto__ || Object.getPrototypeOf(FindItPage)).call(this, props));
 
     _this.resetNumbers = function () {
+      console.log('reset');
       var i = Math.floor(Math.random() * 11);
       var list = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-      _this.state.bingo = list[i];
-      _this.state.isMatch = false;
+      var newBingo = list[i];
+      var newList = shuffle(list);
+      var newState = _this.state;
+      newState.bingo = newBingo;
+      newState.list = newList;
+      _this.setState(newState);
     };
 
     _this.handleClick = function (symbol) {
-      _this.Engine.isMatch(symbol);
-      _this.setState(_this.Engine.getState());
+      if (symbol === _this.state.bingo) {
+
+        _this.resetNumbers();
+        // alert('Correct!!!');
+      }
+    };
+
+    _this.foundationSelect = function (e) {
+      console.log(e.target.value);
+      var newState = _this.state;
+      var foundation = e.target.value;
+      newState.currentFoundation.name = foundation;
+      _this.setState(newState);
+      console.log('new foundation', _this.state.currentFoundation);
     };
 
     _this.render = function () {
@@ -24150,11 +24177,48 @@ var FindItPage = function (_Component) {
         null,
         _react2.default.createElement(
           'div',
+          { id: 'user' },
+          _react2.default.createElement(
+            'div',
+            { className: 'item' },
+            _this.state.user
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'item' },
+            'Foundation:',
+            _react2.default.createElement(
+              'select',
+              { onChange: _this.foundationSelect },
+              _this.state.foundations.map(function (foundation, i) {
+                return _react2.default.createElement(
+                  'option',
+                  { value: foundation },
+                  foundation
+                );
+              })
+            )
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'item' },
+            '$',
+            _this.state.currentFoundation.contributions
+          )
+        ),
+        _react2.default.createElement(
+          'div',
           null,
+          'Find The Number ',
+          _this.state.bingo
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'container' },
           _this.state.list.map(function (symbol, i) {
             return _react2.default.createElement(
-              'button',
-              { key: i, onClick: function onClick() {
+              'div',
+              { className: 'buttons', key: i, onClick: function onClick() {
                   return _this.handleClick(symbol);
                 } },
               symbol
@@ -24165,11 +24229,17 @@ var FindItPage = function (_Component) {
     };
 
     _this.state = {
-      list: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-      bingo: null,
+      user: 'Alexa',
+      foundations: ['Fisher House', 'Gates Foundation'],
+      currentFoundation: {
+        name: 'Fisher House',
+        contributions: 34.78
+      },
+      list: shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
+      bingo: Math.floor(Math.random() * 11),
       isMatch: false
     };
-    _this.resetNumbers();
+
     return _this;
   }
 
@@ -24204,8 +24274,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-console.log('fuc you parente');
-
 var App = function (_Component) {
   _inherits(App, _Component);
 
@@ -24218,18 +24286,13 @@ var App = function (_Component) {
   _createClass(App, [{
     key: 'render',
     value: function render() {
-      console.log('wtf');
+
       return _react2.default.createElement(
         _reactRouterDom.BrowserRouter,
         null,
         _react2.default.createElement(
           _react.Fragment,
           null,
-          _react2.default.createElement(
-            'h1',
-            null,
-            'My Find It App'
-          ),
           _react2.default.createElement(_reactRouterDom.Route, { path: '/', component: _find2.default })
         )
       );
