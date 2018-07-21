@@ -59,7 +59,7 @@ export default class FindItPage extends Component {
   render = () => {
     return <Fragment>
       <div id="user">
-      <div className="item">{this.state.user}</div>
+      <div className="item">USER: {this.state.user}</div>
       <div className="item">Foundation:
         <select onChange={this.foundationSelect}>
           {this.state.foundations.map((foundation, i) => {

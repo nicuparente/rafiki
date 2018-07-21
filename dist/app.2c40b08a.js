@@ -24181,6 +24181,7 @@ var FindItPage = function (_Component) {
           _react2.default.createElement(
             'div',
             { className: 'item' },
+            'USER: ',
             _this.state.user
           ),
           _react2.default.createElement(
