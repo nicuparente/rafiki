@@ -33727,17 +33727,17 @@ var FindItPage = function (_Component) {
           method: 'post',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            "userId": "5b5401660d81b52de925dd7c",
-            "companyId": "5b53d5b70c69102d4fa7c152",
+            "userId": "5b54c2b17ad92b3125fe8896",
+            "companyId": "5b54c2b17ad92b3125fe889b",
             "foundationId": _this.state.currentFoundation.id,
-            "companyName": "FishBook",
+            "companyName": "Candy Crush",
             "foundationName": _this.state.currentFoundation.name,
             "donated": 10
           })
         }).then(function (res) {
           return console.log('donation submitted');
         }).then(function () {
-          fetch('http://localhost:8080/api/user/5b5401660d81b52de925dd7c').then(function (data) {
+          fetch('http://localhost:8080/api/user/5b54c2b17ad92b3125fe8896').then(function (data) {
             return data.json();
           }).then(function (data) {
 
@@ -33776,7 +33776,7 @@ var FindItPage = function (_Component) {
       newState.currentFoundation.name = foundation;
       _this.setState(newState);
 
-      fetch('http://localhost:8080/api/user/5b5401660d81b52de925dd7c').then(function (data) {
+      fetch('http://localhost:8080/api/user/5b54c2b17ad92b3125fe8896').then(function (data) {
         return data.json();
       }).then(function (data) {
 
@@ -33859,11 +33859,11 @@ var FindItPage = function (_Component) {
     };
 
     _this.state = {
-      user: 'ricky',
-      foundations: ['good', 'bad'],
+      user: 'Alexa',
+      foundations: ['Fisher House', 'St. Judes', 'Red Cross', 'Make A Wish', 'Americares'],
       currentFoundation: {
-        name: 'good',
-        contributions: null,
+        name: 'Fisher House',
+        contributions: 0,
         id: null
       },
       list: shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
@@ -33881,7 +33881,7 @@ var FindItPage = function (_Component) {
       var _this2 = this;
 
       console.log('did mount');
-      fetch('http://localhost:8080/api/user/5b5401660d81b52de925dd7c').then(function (data) {
+      fetch('http://localhost:8080/api/user/5b54c2b17ad92b3125fe8896').then(function (data) {
         return data.json();
       }).then(function (data) {
 
@@ -34067,7 +34067,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '51964' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '51799' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 

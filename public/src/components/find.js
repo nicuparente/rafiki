@@ -14,11 +14,11 @@ export default class FindItPage extends Component {
     super(props);
     
     this.state = {
-      user: 'ricky',
-      foundations: ['good', 'bad'],
+      user: 'Alexa',
+      foundations: ['Fisher House', 'St. Judes', 'Red Cross', 'Make A Wish', 'Americares'],
       currentFoundation: {
-        name: 'good',
-        contributions: null,
+        name: 'Fisher House',
+        contributions: 0,
         id: null
       },
       list: shuffle([1,2,3,4,5,6,7,8,9,10]),
@@ -30,7 +30,7 @@ export default class FindItPage extends Component {
   }
   componentDidMount(){
     console.log('did mount')
-      fetch('http://localhost:8080/api/user/5b5401660d81b52de925dd7c')
+      fetch('http://localhost:8080/api/user/5b54c2b17ad92b3125fe8896')
         .then(data => data.json())
         .then((data) => {
 
@@ -77,17 +77,17 @@ export default class FindItPage extends Component {
         method: 'post',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
-          "userId": "5b5401660d81b52de925dd7c",
-          "companyId": "5b53d5b70c69102d4fa7c152",
+          "userId": "5b54c2b17ad92b3125fe8896",
+          "companyId": "5b54c2b17ad92b3125fe889b",
           "foundationId": this.state.currentFoundation.id,
-          "companyName": "FishBook",
+          "companyName": "Candy Crush",
           "foundationName": this.state.currentFoundation.name,
           "donated": 10
         })
       }).then(function(res) {
         return console.log('donation submitted')
       }).then(function() {
-        fetch('http://localhost:8080/api/user/5b5401660d81b52de925dd7c')
+        fetch('http://localhost:8080/api/user/5b54c2b17ad92b3125fe8896')
         .then(data => data.json())
         .then((data) => {
 
@@ -125,7 +125,7 @@ export default class FindItPage extends Component {
     newState.currentFoundation.name = foundation
     this.setState(newState)
 
-    fetch('http://localhost:8080/api/user/5b5401660d81b52de925dd7c')
+    fetch('http://localhost:8080/api/user/5b54c2b17ad92b3125fe8896')
         .then(data => data.json())
         .then((data) => {
 
