@@ -24154,9 +24154,12 @@ var FindItPage = function (_Component) {
       newState.bingo = newBingo;
       newState.list = newList;
       _this.setState(newState);
+      console.log('state', _this.state);
     };
 
-    _this.handleClick = function (symbol) {
+    _this.handleClick = function (symbol, curState) {
+      console.log(curState);
+      var finalState = void 0;
       if (symbol === _this.state.bingo) {
         _this.resetNumbers();
         alert('Correct!!!');
@@ -24164,16 +24167,45 @@ var FindItPage = function (_Component) {
           method: 'post',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            "userId": "5b53d4e60c69102d4fa7c150",
+            "userId": "5b5401660d81b52de925dd7c",
             "companyId": "5b53d5b70c69102d4fa7c152",
-            "foundationId": "5b53d61c0c69102d4fa7c153",
+            "foundationId": _this.state.currentFoundation.id,
             "companyName": "FishBook",
             "foundationName": _this.state.currentFoundation.name,
             "donated": 10
           })
         }).then(function (res) {
           return console.log('donation submitted');
+        }).then(function () {
+          fetch('http://localhost:8080/api/user/5b5401660d81b52de925dd7c').then(function (data) {
+            return data.json();
+          }).then(function (data) {
+
+            var foundation = data.foundations.filter(function (obj) {
+              return obj.foundationName === curState.currentFoundation.name;
+            });
+            var donations = void 0;
+            if (foundation[0].foundationContribution) {
+              donations = foundation[0].foundationContribution;
+            } else {
+              donations = 0;
+            }
+            var id = foundation[0].foundationId;
+            console.log('id', id);
+            console.log('donations', donations);
+
+            var newUserData = data;
+            var newState = curState;
+
+            newState.currentFoundation.contributions = donations;
+            newState.userData = newUserData;
+            newState.currentFoundation.id = id;
+            console.log(newState);
+            finalState = newState;
+          });
         });
+        _this.setState(finalState);
+        console.log('stateeee', _this.state);
       }
     };
 
@@ -24183,7 +24215,27 @@ var FindItPage = function (_Component) {
       var foundation = e.target.value;
       newState.currentFoundation.name = foundation;
       _this.setState(newState);
-      console.log('new foundation', _this.state.currentFoundation);
+
+      fetch('http://localhost:8080/api/user/5b5401660d81b52de925dd7c').then(function (data) {
+        return data.json();
+      }).then(function (data) {
+
+        var foundation = data.foundations.filter(function (obj) {
+          return obj.foundationName === _this.state.currentFoundation.name;
+        });
+        var donations = foundation[0].foundationContribution;
+        var id = foundation[0].foundationId;
+        console.log('donations', donations);
+
+        var newUserData = data;
+        var newState = _this.state;
+        newState.currentFoundation.contributions = donations;
+        newState.userData = newUserData;
+        newState.currentFoundation.id = id;
+        _this.setState(newState);
+        console.log('user data', _this.state);
+      });
+      console.log('state', _this.state);
     };
 
     _this.render = function () {
@@ -24235,7 +24287,7 @@ var FindItPage = function (_Component) {
             return _react2.default.createElement(
               'div',
               { className: 'buttons', key: i, onClick: function onClick() {
-                  return _this.handleClick(symbol);
+                  return _this.handleClick(symbol, _this.state);
                 } },
               symbol
             );
@@ -24245,11 +24297,12 @@ var FindItPage = function (_Component) {
     };
 
     _this.state = {
-      user: 'Alexa',
-      foundations: ['Fisher House', 'Gates Foundation'],
+      user: 'ricky',
+      foundations: ['good', 'bad'],
       currentFoundation: {
-        name: 'Gates Foundation',
-        contributions: null
+        name: 'good',
+        contributions: null,
+        id: null
       },
       list: shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
       bingo: Math.floor(Math.random() * 11),
@@ -24265,21 +24318,31 @@ var FindItPage = function (_Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      fetch('http://localhost:8080/api/user/5b53d4e60c69102d4fa7c150').then(function (data) {
+      console.log('did mount');
+      fetch('http://localhost:8080/api/user/5b5401660d81b52de925dd7c').then(function (data) {
         return data.json();
       }).then(function (data) {
 
         var foundation = data.foundations.filter(function (obj) {
           return obj.foundationName === _this2.state.currentFoundation.name;
         });
-        var donations = foundation[0].foundationContribution;
+        var donations = void 0;
+        if (foundation[0].foundationContribution) {
+          donations = foundation[0].foundationContribution;
+        } else {
+          donations = 0;
+        }
+        var id = foundation[0].foundationId;
+        console.log('id', id);
         console.log('donations', donations);
+
         var newUserData = data;
         var newState = _this2.state;
         newState.currentFoundation.contributions = donations;
         newState.userData = newUserData;
+        newState.currentFoundation.id = id;
         _this2.setState(newState);
-        console.log('user data', _this2.state);
+        console.log('state', _this2.state);
       });
     }
   }]);
