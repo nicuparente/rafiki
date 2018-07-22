@@ -33696,6 +33696,10 @@ function shuffle(a) {
   return a;
 }
 
+var userID = '5b54c2b17ad92b3125fe8896';
+var company = "Candy Crush";
+var companyID = "5b54c2b17ad92b3125fe889b";
+
 var FindItPage = function (_Component) {
   _inherits(FindItPage, _Component);
 
@@ -33723,21 +33727,21 @@ var FindItPage = function (_Component) {
       if (symbol === _this.state.bingo) {
         _this.resetNumbers();
         alert('Correct!!!');
-        fetch('http://localhost:8080/api/give', {
+        fetch(undefined + '/api/give', {
           method: 'post',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            "userId": "5b54c2b17ad92b3125fe8896",
-            "companyId": "5b54c2b17ad92b3125fe889b",
+            "userId": userID,
+            "companyId": companyID,
             "foundationId": _this.state.currentFoundation.id,
-            "companyName": "Candy Crush",
+            "companyName": company,
             "foundationName": _this.state.currentFoundation.name,
             "donated": 10
           })
         }).then(function (res) {
           return console.log('donation submitted');
         }).then(function () {
-          fetch('http://localhost:8080/api/user/5b54c2b17ad92b3125fe8896').then(function (data) {
+          fetch(undefined + '/api/user/' + userID).then(function (data) {
             return data.json();
           }).then(function (data) {
 
@@ -33776,7 +33780,7 @@ var FindItPage = function (_Component) {
       newState.currentFoundation.name = foundation;
       _this.setState(newState);
 
-      fetch('http://localhost:8080/api/user/5b54c2b17ad92b3125fe8896').then(function (data) {
+      fetch(undefined + '/api/user/' + userID).then(function (data) {
         return data.json();
       }).then(function (data) {
 
@@ -33881,7 +33885,7 @@ var FindItPage = function (_Component) {
       var _this2 = this;
 
       console.log('did mount');
-      fetch('http://localhost:8080/api/user/5b54c2b17ad92b3125fe8896').then(function (data) {
+      fetch(undefined + '/api/user/' + userID).then(function (data) {
         return data.json();
       }).then(function (data) {
 
@@ -34067,7 +34071,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = '' || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + '51799' + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + '52926' + '/');
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
 

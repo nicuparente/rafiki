@@ -9,6 +9,10 @@ function shuffle(a) {
     return a;
 }
 
+const userID = '5b54d71cb32a2e0004e18b15'
+const company = "Candy Crush";
+const companyID = "5b54d71cb32a2e0004e18b1a"
+
 export default class FindItPage extends Component {
   constructor(props) {
     super(props);
@@ -30,7 +34,7 @@ export default class FindItPage extends Component {
   }
   componentDidMount(){
     console.log('did mount')
-      fetch('http://localhost:8080/api/user/5b54c2b17ad92b3125fe8896')
+      fetch(`https://hedgehog-backend.herokuapp.com/api/user/${userID}`)
         .then(data => data.json())
         .then((data) => {
 
@@ -73,21 +77,21 @@ export default class FindItPage extends Component {
     if(symbol ===  this.state.bingo){
       this.resetNumbers();
       alert('Correct!!!');
-      fetch('http://localhost:8080/api/give', {
+      fetch(`https://hedgehog-backend.herokuapp.com/api/give`, {
         method: 'post',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
-          "userId": "5b54c2b17ad92b3125fe8896",
-          "companyId": "5b54c2b17ad92b3125fe889b",
+          "userId": userID,
+          "companyId": companyID,
           "foundationId": this.state.currentFoundation.id,
-          "companyName": "Candy Crush",
+          "companyName": company,
           "foundationName": this.state.currentFoundation.name,
-          "donated": 10
+          "donated": 2
         })
       }).then(function(res) {
         return console.log('donation submitted')
       }).then(function() {
-        fetch('http://localhost:8080/api/user/5b54c2b17ad92b3125fe8896')
+        fetch(`${process.env.BACKEP}/api/user/${userID}`)
         .then(data => data.json())
         .then((data) => {
 
@@ -125,7 +129,7 @@ export default class FindItPage extends Component {
     newState.currentFoundation.name = foundation
     this.setState(newState)
 
-    fetch('http://localhost:8080/api/user/5b54c2b17ad92b3125fe8896')
+    fetch(`https://hedgehog-backend.herokuapp.com/api/user/${userID}`)
         .then(data => data.json())
         .then((data) => {
 
