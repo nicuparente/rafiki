@@ -24156,9 +24156,21 @@ var FindItPage = function (_Component) {
 
     _this.handleClick = function (symbol) {
       if (symbol === _this.state.bingo) {
-
         _this.resetNumbers();
-        // alert('Correct!!!');
+        alert('Correct!!!');
+        fetch('http://localhost:8080/api/give', {
+          method: 'post',
+          headers: { 'Content-Type': 'application/json' },
+          body: {
+            "userID": '',
+            "companyId": '',
+            "foundationId": '',
+            "foundationName": _this.state.currentFoundation.name,
+            "donated": 10
+          }
+        }).then(function (res) {
+          return console.log('donation submitted');
+        });
       }
     };
 

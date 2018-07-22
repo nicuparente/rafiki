@@ -40,9 +40,21 @@ export default class FindItPage extends Component {
 
   handleClick = (symbol) => {
     if(symbol ===  this.state.bingo){
-      
       this.resetNumbers();
-      // alert('Correct!!!');
+      alert('Correct!!!');
+      fetch('http://localhost:8080/api/give', {
+        method: 'post',
+        headers: {'Content-Type':'application/json'},
+        body: {
+          "userID": '',
+          "companyId": '',
+          "foundationId": '',
+          "foundationName": this.state.currentFoundation.name,
+          "donated": 10
+        }
+      }).then(function(res) {
+        return console.log('donation submitted')
+      })
     }
   }
 
