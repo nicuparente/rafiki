@@ -15,12 +15,16 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
+    "bootstrap": "^4.1.2",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
+    "jquery": "^3.3.1",
     "parcel-bundler": "^1.9.7",
+    "popper.js": "^1.14.3",
     "react": "^16.4.0",
     "react-dom": "^16.4.0",
-    "react-router-dom": "^4.3.1"
+    "react-router-dom": "^4.3.1",
+    "reactstrap": "^6.3.0"
   },
   "devDependencies": {
     "eslint": "^4.19.1",

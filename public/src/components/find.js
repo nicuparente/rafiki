@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react';
-
+import { Button } from 'reactstrap';
 
 function shuffle(a) {
     for (let i = a.length - 1; i > 0; i--) {
@@ -150,19 +150,19 @@ export default class FindItPage extends Component {
     return <Fragment>
       <div id="user">
       <div className="item">USER: {this.state.user}</div>
-      <div className="item">Foundation:
+      <div className="item">Foundation: 
         <select onChange={this.foundationSelect}>
           {this.state.foundations.map((foundation, i) => {
             return <option value={foundation}>{foundation}</option>
           })}
         </select>
       </div>
-      <div className="item">${this.state.currentFoundation.contributions}</div>
+      <div className="item">Contribution To {this.state.currentFoundation.name} ${this.state.currentFoundation.contributions}</div>
       </div>
-      <div>Find The Number {this.state.bingo}</div>
+      <div id="bing">Find The Number {this.state.bingo}</div>
       <div className="container">
         {this.state.list.map((symbol,i) => {
-          return <div className="buttons" key={i} onClick={() => this.handleClick(symbol, this.state)}>{symbol}</div>
+          return <Button color="success" className="buttons" key={i} onClick={() => this.handleClick(symbol, this.state)}>{symbol}</Button>
         })}
       </div>
     </Fragment>
