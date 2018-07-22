@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom';
 import ReactDOM from 'react-dom';
 import FindItPage from './components/find';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class App extends Component {
   

@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react';
-
+import { Button } from 'reactstrap';
 
 function shuffle(a) {
     for (let i = a.length - 1; i > 0; i--) {
@@ -14,11 +14,12 @@ export default class FindItPage extends Component {
     super(props);
     
     this.state = {
-      user: 'Alexa',
-      foundations: ['Fisher House', 'Gates Foundation'],
+      user: 'ricky',
+      foundations: ['good', 'bad'],
       currentFoundation: {
-        name: 'Gates Foundation',
-        contributions: null
+        name: 'good',
+        contributions: null,
+        id: null
       },
       list: shuffle([1,2,3,4,5,6,7,8,9,10]),
       bingo: Math.floor(Math.random() * 11),
@@ -28,19 +29,29 @@ export default class FindItPage extends Component {
   
   }
   componentDidMount(){
-      fetch('http://localhost:8080/api/user/5b53d4e60c69102d4fa7c150')
+    console.log('did mount')
+      fetch('http://localhost:8080/api/user/5b5401660d81b52de925dd7c')
         .then(data => data.json())
         .then((data) => {
 
           let foundation = data.foundations.filter(obj => obj.foundationName === this.state.currentFoundation.name)
-          let donations = foundation[0].foundationContribution
+          let donations;
+          if(foundation[0].foundationContribution){
+            donations = foundation[0].foundationContribution;
+          }else {
+            donations = 0;
+          }
+          let id = foundation[0].foundationId
+          console.log('id', id)
           console.log('donations', donations)
+
            let newUserData = data;
            let newState = this.state;
            newState.currentFoundation.contributions = donations
            newState.userData = newUserData;
+           newState.currentFoundation.id = id
            this.setState(newState)
-          console.log('user data', this.state)
+          console.log('state', this.state)
         }); 
     };
   resetNumbers = () => {
@@ -53,9 +64,12 @@ export default class FindItPage extends Component {
     newState.bingo = newBingo
     newState.list = newList
     this.setState(newState)
+    console.log('state', this.state)
   }
 
-  handleClick = (symbol) => {
+  handleClick = (symbol,curState) => {
+    console.log(curState);
+    let finalState;
     if(symbol ===  this.state.bingo){
       this.resetNumbers();
       alert('Correct!!!');
@@ -63,16 +77,44 @@ export default class FindItPage extends Component {
         method: 'post',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
-          "userId": "5b53d4e60c69102d4fa7c150",
+          "userId": "5b5401660d81b52de925dd7c",
           "companyId": "5b53d5b70c69102d4fa7c152",
-          "foundationId": "5b53d61c0c69102d4fa7c153",
+          "foundationId": this.state.currentFoundation.id,
           "companyName": "FishBook",
           "foundationName": this.state.currentFoundation.name,
           "donated": 10
         })
       }).then(function(res) {
         return console.log('donation submitted')
+      }).then(function() {
+        fetch('http://localhost:8080/api/user/5b5401660d81b52de925dd7c')
+        .then(data => data.json())
+        .then((data) => {
+
+          let foundation = data.foundations.filter(obj => obj.foundationName === curState.currentFoundation.name)
+          let donations;
+          if(foundation[0].foundationContribution){
+            donations = foundation[0].foundationContribution;
+          }else {
+            donations = 0;
+          }
+          let id = foundation[0].foundationId
+          console.log('id', id)
+          console.log('donations', donations)
+
+           let newUserData = data;
+           let newState = curState;
+           
+           newState.currentFoundation.contributions = donations
+           newState.userData = newUserData;
+           newState.currentFoundation.id = id
+            console.log(newState)
+          finalState =  newState
+         
+        });
       })
+      this.setState(finalState)
+      console.log('stateeee', this.state)
     }
   }
 
@@ -82,7 +124,25 @@ export default class FindItPage extends Component {
     let foundation = e.target.value
     newState.currentFoundation.name = foundation
     this.setState(newState)
-    console.log('new foundation', this.state.currentFoundation)
+
+    fetch('http://localhost:8080/api/user/5b5401660d81b52de925dd7c')
+        .then(data => data.json())
+        .then((data) => {
+
+          let foundation = data.foundations.filter(obj => obj.foundationName === this.state.currentFoundation.name)
+          let donations = foundation[0].foundationContribution
+          let id = foundation[0].foundationId
+          console.log('donations', donations)
+
+           let newUserData = data;
+           let newState = this.state;
+           newState.currentFoundation.contributions = donations
+           newState.userData = newUserData;
+           newState.currentFoundation.id = id
+           this.setState(newState)
+          console.log('user data', this.state)
+        });
+    console.log('state', this.state)
   }
   
 
@@ -90,19 +150,19 @@ export default class FindItPage extends Component {
     return <Fragment>
       <div id="user">
       <div className="item">USER: {this.state.user}</div>
-      <div className="item">Foundation:
+      <div className="item">Foundation: 
         <select onChange={this.foundationSelect}>
           {this.state.foundations.map((foundation, i) => {
             return <option value={foundation}>{foundation}</option>
           })}
         </select>
       </div>
-      <div className="item">${this.state.currentFoundation.contributions}</div>
+      <div className="item">Contribution To {this.state.currentFoundation.name} ${this.state.currentFoundation.contributions}</div>
       </div>
-      <div>Find The Number {this.state.bingo}</div>
+      <div id="bing">Find The Number {this.state.bingo}</div>
       <div className="container">
         {this.state.list.map((symbol,i) => {
-          return <div className="buttons" key={i} onClick={() => this.handleClick(symbol)}>{symbol}</div>
+          return <Button color="success" className="buttons" key={i} onClick={() => this.handleClick(symbol, this.state)}>{symbol}</Button>
         })}
       </div>
     </Fragment>
